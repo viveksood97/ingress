@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/login.css') }}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>INGRESS | Login</title>
+</head>
+
+
+<div class="page">
+    <div class="message">{{message}}</div>
+    <!-- <div class="message">INGRESS is down till 4:00pm, Sorry for the inconvenience</div> -->
+    <div class="container">
+      <div class="left">
+        <div class="login"  style="color:#FF083B;" > <i class="fa fa-bolt" aria-hidden="true"></i> Ingress</div>
+        <div class="eula">Developed and maintained by NOC-Dev-Ops Team <br><br> New user? <a href="{{ url_for('register') }}" style="color:#FF083B;">Click Here</a></div>
+      </div>
+      <div class="right">
+        
+        <div class="form">
+         <form action="/" method="POST">
+            <label for="email">Olms ID</label>
+            <input type="text" class="login-field" value="" name="username" required>
+            <label for="email">Password</label>
+            <input type="password" class="login-field" value=""  name="password" required>
+            
+          <input type="submit" id="submit" value="Submit">
+           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</html>
+
+
+
+
+
+
+

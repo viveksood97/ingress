@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'archia';
+    src: url("./archia-regular-webfont.woff") format("woff");
+    /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+  }
+  body{
+    padding:0;
+    margin:0;
+    color: #fff;
+    font-family: 'Nunito Semibold';
+    text-align: center;
+ }
+@media screen and (min-width:760px){
+    #content{
+        max-width: 100%;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(15,1fr); 
+        grid-auto-rows:minmax(10vh, auto);
+        position: relative
+    }
+    
+   
+    main{
+        background:white;
+        grid-column: 3/16;
+        grid-row:1/11;
+    }
+   
+    nav{
+        background:#313A46;
+        grid-column: 1/3;
+        grid-row:1/11;
+    }
+    
+    
+    
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/login.css') }}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>INGRESS | Register</title>
+</head>
+
+
+<div class="page">
+  <div class="message">{{message}}</div>
+    <div class="container" style="height: 400px;">
+      <div class="left">
+        <div class="loginr"  style="color:#FF083B;" > <i class="fa fa-bolt" aria-hidden="true"></i> Ingress</div>
+        <div class="eula">Developed and maintained by NOC-Dev-Ops Team <br><br> Already Registered? <a href="{{ url_for('index') }}" style="color:#FF083B;">Click Here</a></div>
+      </div>
+      <div class="right">
+        
+        <div class="form">
+         <form action="/register" method="POST">
+            <label class="register" for="email">Olms ID</label>
+            <input type="text" class="login-field" value="" name="username" required>
+            <label class="register" for="email">Name</label>
+            <input type="text" class="login-field" value="" name="name" required>
+            <label class="register" for="email">Department</label>
+            <input type="text" class="login-field" value="" name="department" required>
+            <label class="register" for="email">Manager's Name</label>
+            <input type="text" class="login-field" value="" name="manager" required>
+            <label class="register" for="email">Password</label>
+            <input type="password" onkeyup="check()" class="login-field pass" value=""  name="password" required>
+            <label  class="register" for="email">Confirm Password <i class="fa fa-check"  style="color:green; display:none" aria-hidden="true"></i>  <i class="fa fa-times" style="color:red; display:none" aria-hidden="true"></i></label>  
+            <input type="password" onkeyup="check()" class="login-field cpass" value=""  name="confirmpassword" required>
+            <input type="submit" id="submitr" value="Submit">
+           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</html>
+
+<script>
+
+
+
+function check(){
+    let cpass = document.querySelector(".cpass")
+    let pass = document.querySelector(".pass")
+    if(cpass.value === pass.value && cpass.value && pass.value){
+        document.querySelector(".fa-check").style.display = "inline"
+        document.querySelector(".fa-times").style.display = "none"
+        document.querySelector("#submitr").style.display = "inline"
+    }
+    else{
+        document.querySelector(".fa-check").style.display = "none"
+        document.querySelector(".fa-times").style.display = "inline"
+        document.querySelector("#submitr").style.display = "none"
+    }
+}
+
+</script>
+
+
+
+
+

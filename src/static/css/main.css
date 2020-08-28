@@ -1,0 +1,284 @@
+@font-face {
+  font-family: 'archia';
+  src: url("./archia-regular-webfont.woff") format("woff");
+  /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}
+body {
+  margin:0;
+  padding: 0;
+  color: rgb(39, 38, 38);
+  font-family: archia;
+  
+}
+
+.database{
+font-family: inherit;
+text-align: center;
+background: white;
+color:black;
+border:none;
+border-radius: 4px;
+margin:11px 10px 11px 0;
+padding:4px 10px 4px 5px;
+z-index:12;
+}
+
+header{
+  position: fixed;
+  border: 1px solid #c6c9cc81;
+  top:0;
+  display: flex;
+  align-items:flex-end;
+  width: 100%;
+  height:50px;
+  background:#EEEEEF;
+}
+ header p{
+  margin:15px 5px 15px 10px;
+  font-weight: bold;
+  font-size: 0.84em;
+  cursor: pointer;
+}
+
+header p:first-child{
+  margin:15px 5px 15px 10px;
+  font-weight: bold;
+  font-size: 20px;
+}
+nav{
+  /* padding-top:15px; */
+  position: fixed;
+  border-top: 1px solid #c6c9cc81;
+  height: calc(80% - 50px);
+  top:51px;
+  width:239px;
+  background: #EEEEEF;
+  border-right: 1px solid #c6c9cc81;
+  display:flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+nav a{
+  text-decoration: none;
+}
+
+nav p{
+  cursor: pointer;
+  color: rgb(39, 38, 38);
+  font-weight: bold;
+  font-size: 13px;
+  margin:5px 0px 5px 10px;
+}
+nav p:first-child{
+  padding-top: 15px;
+}
+nav p:last-child{
+  padding-bottom: 10px;
+}
+nav p:hover{
+  color:rgb(228, 119, 119);
+}
+
+.tableInfo{
+  cursor:pointer;
+  padding-top:1px;
+  position: fixed;
+  width:239px;
+  top: calc(80%);
+  height: calc(20%);
+  background: #EEEEEF;
+  border-top:1px solid #c6c9cc81;
+  border-right:1px solid #c6c9cc81;
+}
+.tableInfo p:first-child{
+  color:black;
+  font-size: 15px;
+  margin-bottom:7px;
+}
+.tableInfo p{
+  cursor: pointer;
+  color: rgb(39, 38, 38);
+  font-weight: bold;
+  font-size: 12px;
+  margin:7px 15px 7px 6px;
+}
+.fa-table{
+  padding-right:5px;
+}
+
+
+.terminal-window {
+  display:none;
+  width: calc(100% - 240px);
+  height: calc(100% - 50px);
+  left: 240px;
+  top:51px;
+  position: fixed;
+  overflow-x: auto;
+}
+table {
+  table-layout: auto;
+  font-size:12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.index{
+  text-align:center;
+  min-width: 50px;
+  max-width: 200px;
+}
+td {
+  padding:15px;
+  color:black;
+  min-width: 200px;
+}
+th {
+  min-width: 200px;
+  font-size:14px;
+  border-right: 1px solid #c6c9cc81;
+  background: #EEEEEF;
+  color: rgb(39, 38, 38);
+  text-align: center;
+  
+}
+
+th:first-child{
+  max-width: 50px;
+}
+
+
+.realheader{
+  position: sticky;
+  top:0;
+  width: 100%;
+  border-top: 1px solid #c6c9cc81;
+  z-index:11;
+  padding:10px 15px 8px 15px;
+}
+.realicon{
+  
+  position: sticky;
+  top:36px;
+  border-bottom: 1px solid #c6c9cc81;
+}
+
+
+td {
+  border-right: 1px solid #c6c9cc81;
+  border-bottom: 1px solid #c6c9cc81;
+}
+
+
+tr:nth-child(even) td {
+  background: #EEEEEF;
+}
+
+th  .search{
+  width: 100%;
+  height: 20px;
+  text-align: center;
+   
+   color:black;
+  z-index:12;
+   top:-10px;
+  
+}
+
+input{
+width: 90%;
+font-family: inherit;
+text-align: center;
+background: white;
+color:black;
+top: -10px;
+max-width: 300px;
+border-radius: 4px;
+margin:0 5px 0 5px;
+padding:4px 10px 4px 5px;
+border:1px solid #c6c9cc81;
+
+}
+
+input:focus,
+select:focus,
+option:focus,
+textarea:focus,
+button:focus {
+outline-color: rgba(228, 119, 119, 0.493);
+}
+
+.globalfilter{
+width: 110%;
+}
+
+.watcher{
+display:block;
+}
+
+.noEntry{
+display:none;
+}
+
+.END{
+width: 100%;
+overflow:hidden;
+font-size:20px;
+border-right: 1px solid #c6c9cc81;
+border-bottom: 1px solid #c6c9cc81;
+background: #EEEEEF;
+padding:15px;
+color: black;
+display: block;
+text-align: center;
+}
+
+
+
+h1 {
+font-family: inherit;
+color: #FF083B;
+font-weight: bold;
+text-transform: uppercase;
+font-size: 17px;
+letter-spacing: 1.5px;
+text-align: center;
+width: 155px;
+margin-top: 10px;
+animation: fade 2s infinite;
+-moz-animation: fade 2s infinite;
+}
+
+.container {
+width: 180px;
+padding-top: 5px;
+margin: auto;
+}
+
+
+@keyframes fade {
+50% {
+  opacity: 0.5;
+}
+100% {
+  opacity: 1;
+}
+}
+@-moz-keyframes fade {
+50% {
+  opacity: 0.5;
+}
+100% {
+  opacity: 1;
+}
+}
+@-o-keyframes fade {
+50% {
+  opacity: 0.5;
+}
+100% {
+  opacity: 1;
+}
+}

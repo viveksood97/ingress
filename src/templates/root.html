@@ -1,0 +1,303 @@
+
+
+<!-- 23-March-1998 -->
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/main.css') }}" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<title>INGRESS</title>
+
+<body>
+    <header>
+        <a href="{{ url_for('home') }}" style="color:#FF083B;text-decoration: none;">
+            <p style="color:#FF083B;margin:15px 70px 15px 60px;"><i class="fa fa-bolt" aria-hidden="true"></i> Ingress
+            </p>
+        </a>
+        <p>Database: </p>
+        <select onchange="selectDatabase(this.value)" class="database">
+            <option value="" selected disabled hidden>Choose Database</option>
+            <option value="router_db_mysql">MPLS ISP Database</option>
+            <option value="CEN_db_mysql">CEN Database</option>
+            <option value="enodeb_topology">ENODEB Topology</option>
+            <option value="twampAuditTxDB">TWAMP Database</option>
+            <option value="configDev">NNI Audit Database</option>
+            <option value="deviation">Deviation</option>
+        </select>
+        <p class="header"></p>
+        <p class="download" onClick="downloadFile()"></p>
+        <p class="clearFilter" onClick="clearFilter()"></p>
+        <p class="logout" onClick="logout()" style="position: absolute; top:2px;left:92%; margin: 15px 0px 15px 15px;"><a href="{{ url_for('dropsession') }}" style="color:black;text-decoration: none;">Logout <i
+                    style="color:#FF083B;padding-left:5px" class="fa fa-sign-out" aria-hidden="true"></i></a></p>
+        <!-- <p class="globalSearch" style="position: absolute; top:-1px;left:77.8%" ><input name="form" class="globalfilter" type="text" autocomplete="off"
+            placeholder="Global filter" /></p> -->
+            
+    </header>
+    <nav class="tableNames"></nav>
+    <div class="tableInfo"></div>
+    <div class="terminal-window">
+
+        <table class="table123">
+            <thead>
+                <tr class="headersOfTable"></tr>
+            </thead>
+            <thead>
+                <tr class="iconsOfTable"></tr>
+            </thead>
+
+            <tbody class="tablebody">
+            </tbody>
+
+        </table>
+        <div class="watcher"></div>
+        <div class="container">
+            <h1>Loading...</h1>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+
+<script>
+    var search = document.querySelectorAll('.search');
+    let tableName = ""
+    let counter = 0;
+    let timeout = null;
+    var controller;
+    var redundantRequests = 0
+    window.userData = ["database", "table", "nocolumn", "noword", counter];
+    var table = document.querySelector('.tablebody');
+    watcher = document.querySelector(".watcher")
+    loader = document.querySelector(".container")
+
+    database = document.querySelector(".database")
+    
+    function testForLinks(e){
+        alert(e.textContent)
+    }
+    function clearFilter() {
+        let tableName
+        if (window.userData[1] === 'A9K_Cx_DB') { tableName = "MPLS Customer" }
+        else if (window.userData[1] === 'ISIS_Table') { tableName = "MPLS Backbone" }
+        else if (window.userData[1] === 'A9K_Interface') { tableName = "MPLS Interface" }
+        else if (window.userData[1] === 'A9K_Static') { tableName = "MPLS Static" }
+        else if (window.userData[1] === 'A9K_VRF') { tableName = "MPLS VRF" }
+        else if (window.userData[1] === 'A9K_VRF_BGP') { tableName = "MPLS VRF BGP" }
+        else if (window.userData[1] === 'A9K_OSPF') { tableName = "MPLS OSPF" }
+        else if (window.userData[1] === 'Junos_ISP_Community') { tableName = "ISP Community" }
+        else if (window.userData[1] === 'Junos_ISP_Policy_Statment') { tableName = "ISP Policy Statment" }
+        else if (window.userData[1] === 'Junos_ISP_as_path') { tableName = "ISP as path" }
+        else if (window.userData[1] === 'A9K_VRF_Interface') { tableName = "MPLS VRF Interface" }
+        else if (window.userData[1] === 'Junos_ISP_ISIS') { tableName = "ISP Backbone" }
+        else if (window.userData[1] === 'Junos_ISP_bgp') { tableName = "ISP BGP" }
+        else if (window.userData[1] === 'Junos_PEER_Interface') { tableName = "Peering Table" }
+        else if (window.userData[1] === 'Junos_ISP_Static') { tableName = "ISP Static" }
+        else if (window.userData[1] === 'Junos_ISP_interface') { tableName = "ISP Interface" }
+        else if (window.userData[1] === 'A9K_VRF_LIVE') { tableName = "MPLS VRF LIVE" }
+        else if (window.userData[1] === 'mapa_table') { tableName = "Mapa Table" }
+        else { tableName = window.userData[1] }
+        tableSelect(window.userData[1], tableName)
+    }
+    function showSearchfilter(e) {
+        e.parentNode.parentNode.childNodes[1].childNodes[1].style.display = "block";
+    }
+    function showSearchdrop(e) {
+        e.parentNode.parentNode.childNodes[1].childNodes[3].style.display = "block";
+    }
+    async function loadItems() {
+
+        let response1 = await fetch(`/load?c=${window.userData}`)
+        let data1 = await response1.json().then(data1 => {
+
+
+            table.insertAdjacentHTML("beforeend", data1);
+            window.userData[4] += 35;
+            if (table.childNodes.length < 70) {
+                loader.style.display = "none"
+                watcher.style.display = "none";
+            }
+            else {
+                loader.style.display = "block"
+                watcher.style.display = "block";
+            }
+        })
+    }
+
+    async function selectDatabase(e) {
+
+        window.userData[0] = e;
+        let response = await fetch(`/database?c=${window.userData[0]}`)
+        let string = "";
+        let data = await response.json().then(data => {
+            main = data["Tables_in_" + e]
+            Object.keys(main).forEach(ele => {
+                let tableName
+                if (main[ele] === 'A9K_Cx_DB') { tableName = "MPLS Customer" }
+                else if (main[ele] === 'ISIS_Table') { tableName = "MPLS Backbone" }
+                else if (main[ele] === 'A9K_Interface') { tableName = "MPLS Interface" }
+                else if (main[ele] === 'A9K_Static') { tableName = "MPLS Static" }
+                else if (main[ele] === 'A9K_VRF') { tableName = "MPLS VRF" }
+                else if (main[ele] === 'Junos_ISP_Community') { tableName = "ISP Community" }
+                else if (main[ele] === 'Junos_ISP_Policy_Statment') { tableName = "ISP Policy Statment" }
+                else if (main[ele] === 'Junos_ISP_as_path') { tableName = "ISP as path" }
+                
+                else if (main[ele] === 'A9K_VRF_BGP') { tableName = "MPLS VRF BGP" }
+                else if (main[ele] === 'A9K_OSPF') { tableName = "MPLS OSPF" }
+                else if (main[ele] === 'A9K_VRF_Interface') { tableName = "MPLS VRF Interface" }
+                else if (main[ele] === 'Junos_ISP_ISIS') { tableName = "ISP Backbone" }
+                else if (main[ele] === 'Junos_ISP_bgp') { tableName = "ISP BGP" }
+                else if (main[ele] === 'Junos_PEER_Interface') { tableName = "Peering Table" }
+                else if (main[ele] === 'Junos_ISP_Static') { tableName = "ISP Static" }
+                else if (main[ele] === 'Junos_ISP_interface') { tableName = "ISP Interface" }
+                else if (main[ele] === 'mapa_table') { tableName = "Mapa Table" }
+                else if (main[ele] === 'A9K_VRF_LIVE') { tableName = "MPLS VRF LIVE" }
+                else { tableName = main[ele] }
+                string = string + `<p onclick='tableSelect("${main[ele]}","${tableName}")'><i class="fa fa-table" aria-hidden="true"></i>${tableName}</p>`
+            })
+            
+            string = string + ``
+            document.querySelector(".tableNames").innerHTML = string;
+        })
+    }
+
+    async function tableSelect(e, name) {
+        console.log(name)
+        document.querySelector(".terminal-window").style.display = "block"
+        if (name) { document.querySelector(".header").innerHTML = `TableName:   <span style="color:#FF083B;">${name}</span>` }
+        else { document.querySelector(".header").innerHTML = `TableName:   <span style="color:#FF083B;">${e}</span>` }
+
+        document.querySelector(".download").innerHTML = `Export to .CSV <i style="color:#FF083B;padding-left:5px"class="fa fa-download" aria-hidden="true"></i>`
+        document.querySelector(".clearFilter").innerHTML = `clearFilters <i class="fa fa-ban" style="color:#FF083B;padding-left:5px"aria-hidden="true"></i>`
+
+        if (document.querySelector('.tablebody').innerHTML.length > 13) {
+            document.querySelector('.tablebody').innerHTML = ""
+        }
+        let string = `<th class="realheader index">Index</th>`
+        let string2 = `<th class="realicon index"></th>`
+        let counterForLoop = 0
+
+        window.userData[4] = 0;
+        window.userData[3] = "noword";
+        window.userData[2] = "nocolumn";
+
+        window.userData[1] = e;
+        let response = await fetch(`/tableHeaders?c=${window.userData}`)
+        let data = await response.json().then(data => {
+            data.forEach(ele => {
+                string = string + `<th class="realheader">${ele} </th>`
+                string2 = string2 + `<th class="realicon ${counterForLoop}">
+                        <form>
+                            <div class="search id0"><input name="form" class="filter" type="text" autocomplete="off"
+                                    placeholder="filter" onkeyup='filterContent(this)' /></div>
+                        </form>
+                    </th>`
+                counterForLoop += 1
+            })
+
+
+            document.querySelector(".headersOfTable").innerHTML = string;
+            document.querySelector(".iconsOfTable").innerHTML = string2;
+
+        })
+        watcher.style.display = "block";
+        watcher.style.width = (200 * (counterForLoop + 1) + 80).toString() + 'px'
+        console.log((200 * (counterForLoop + 1) + 80).toString() + 'px')
+        intersectionObserver.observe(watcher)
+        let abab = await fetch(`/tableInfo?c=${window.userData[0]},${e}`)
+        let baba = await abab.text().then(ele => {
+            tableinfo1 = ele.split("/")
+            let tableData = `<p>Table Information</p>
+        <p class="tableName1"></p>
+        <p>Table Size: ${tableinfo1[1]} MB</p>
+        <p class="rows">Number of Rows: ${tableinfo1[0]}</p>
+        <p>Number of Columns: ${counterForLoop + 1}</p>`
+            document.querySelector(".tableInfo").innerHTML = tableData;
+
+        })
+
+
+
+    }
+
+    async function filterContent(e) {
+
+        if ((e.charCode || e.keyCode) === 13) {
+            e.preventDefault();
+        }
+        watcher.style.display = "none";
+        let index = e.parentNode.parentNode.parentNode.className
+        let columnName = document.getElementsByClassName('realheader')[Number(index.split(" ")[1]) + 1].textContent
+        window.userData[2] = columnName;
+        window.userData[3] = e.value;
+        window.userData[4] = counter;
+
+
+        table.innerHTML = "";
+
+        if (controller) {
+            controller.abort();
+        }
+        if (AbortController) {
+            controller = new AbortController();
+            var signal = controller.signal;
+        }
+        fetch(`/load?c=${window.userData}`, { signal })
+            .then(function (response) {
+                // console.log("response", response);
+                response.json().then((data) => {
+                    table.insertAdjacentHTML("beforeend", data);
+                    window.userData[4] = 35;
+                    watcher.style.display = "block";
+
+                })
+
+            })
+            .catch(function (e) {
+                if (e.name === "AbortError") {
+                    redundantRequests++;
+                    console.log(redundantRequests)
+                }
+
+            })
+
+
+
+    }
+
+    async function downloadFile() {
+        let now = new Date();
+        const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: '2-digit', hour:'numeric', minute:'2-digit', second:'2-digit' }) 
+        const [{ value: month },,{ value: day },,{ value: year },,{ value: hour },,{ value: minute },,{ value: second }] = dateTimeFormat .formatToParts(now) 
+        document.querySelector(".download").innerHTML = `<span style="animation:fade 2s infinite;;">Exporting</span>`
+        await fetch(`/downloadFile?c=${window.userData}`).then(function (response) {
+            // returns a Headers{} object
+            response.blob().then(function (myBlob) {
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(myBlob);
+                link.download = window.userData[1]+`-${day}/${month}/${year }_${hour}-${minute}-${second}`+".csv";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                document.querySelector(".download").innerHTML = `Export to .CSV <i style="color:#FF083B;padding-left:5px"class="fa fa-download" aria-hidden="true"></i>`
+            });
+        });
+
+    }
+    var intersectionObserver = new IntersectionObserver(entries => {
+
+        if (entries[0].intersectionRatio <= 0) {
+            return;
+        }
+        loadItems();
+    });
+
+
+
+
+
+</script>
